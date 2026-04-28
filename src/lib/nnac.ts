@@ -73,3 +73,21 @@ export async function verifyNumber(phoneNumber: string) {
   );
   return data;
 }
+
+export async function verifyKyc(
+  phoneNumber: string,
+  idNo?: string,
+  gender?: string,
+  name?: string,
+) {
+  const { data } = await connect.post(
+    `${process.env.NNAC_BASE_URL}/passthrough/camara/v1/kyc-match/kyc-match/v0.3/match`,
+    {
+      phoneNumber,
+      idDocument: idNo || "66666666q",
+      gender: gender || "MALE",
+      ...(name && { name }), // Only include name if provided
+    },
+  );
+  return data;
+}
