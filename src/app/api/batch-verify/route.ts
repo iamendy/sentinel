@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSimSwapStatus, verifyKyc } from "@/lib/nnac";
+import { getSimSwapStatus, verifyKycMatch } from "@/lib/nnac";
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
           // Fetch both sim swap status and KYC verification in parallel
           const [simSwapData, kycData] = await Promise.all([
             getSimSwapStatus(phoneNumber, maxAge),
-            verifyKyc(phoneNumber, idNo, gender, name),
+            verifyKycMatch(phoneNumber, idNo, gender, name),
           ]);
 
           console.log(`SIM Swap Status for ${phoneNumber}:`, simSwapData);

@@ -74,7 +74,7 @@ export async function verifyNumber(phoneNumber: string) {
   return data;
 }
 
-export async function verifyKyc(
+export async function verifyKycMatch(
   phoneNumber: string,
   idNo?: string,
   gender?: string,
