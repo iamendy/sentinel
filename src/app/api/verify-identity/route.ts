@@ -7,11 +7,11 @@ export async function POST(request: NextRequest) {
     const { phoneNumber, idNo } = await request.json();
 
     // Validate phoneNumber
-    if (!phoneNumber) {
+    if (!phoneNumber || !idNo) {
       return NextResponse.json(
         {
           success: false,
-          error: "Phone number is required",
+          error: "phoneNumber and idNo is required",
         },
         { status: 400 },
       );

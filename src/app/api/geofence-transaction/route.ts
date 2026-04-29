@@ -4,14 +4,15 @@ import { getLocationRetrieval, getDeviceStatus } from "@/lib/nnac";
 export async function POST(request: NextRequest) {
   try {
     // Parse request body
-    const { phoneNumber, maxAge } = await request.json();
+    const { phoneNumber, latitude, longitude, radius, maxAge } =
+      await request.json();
 
     // Validate phoneNumber
-    if (!phoneNumber) {
+    if (!phoneNumber || !latitude || !longitude) {
       return NextResponse.json(
         {
           success: false,
-          error: "Phone number is required",
+          error: "phoneNumber, latitude and longitude is required",
         },
         { status: 400 },
       );
@@ -25,6 +26,8 @@ export async function POST(request: NextRequest) {
 
     console.log("Device Location:", locationData);
     console.log("Device Status:", deviceStatusData);
+
+    //TODO: compare location data to analyze result
 
     // Send successful response with both data
     return NextResponse.json(

@@ -76,7 +76,7 @@ export async function verifyNumber(phoneNumber: string) {
 
 export async function verifyKycMatch(
   phoneNumber: string,
-  idNo?: string,
+  idNo: string,
   gender?: string,
   name?: string,
 ) {
@@ -84,8 +84,8 @@ export async function verifyKycMatch(
     `${process.env.NNAC_BASE_URL}/passthrough/camara/v1/kyc-match/kyc-match/v0.3/match`,
     {
       phoneNumber,
-      idDocument: idNo || "66666666q",
-      gender: gender || "MALE",
+      idDocument: idNo,
+      gender: gender || "OTHER",
       ...(name && { name }), // Only include name if provided
     },
   );
