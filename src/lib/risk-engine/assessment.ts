@@ -98,7 +98,7 @@ export async function assessRisk(
     return ruleBasedAssessment(signals, useCase);
   }
 
-  // try AI first for "Agentic AI"
+  // try AI first for Agentic AI
   try {
     // fraud-specific prompt
     const systemPrompt = `You are Sentinel, an AI fraud detection engine for African mobile money and fintech.

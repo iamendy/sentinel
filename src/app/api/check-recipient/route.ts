@@ -1,23 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSimSwapStatus, getDeviceStatus } from "@/lib/nnac";
+import { normalizeToSignals } from "@/lib/risk-engine/signals";
+import { assessRisk } from "@/lib/risk-engine/assessment";
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse request body
     const { phoneNumber, maxAge } = await request.json();
 
-    // Validate phoneNumber
     if (!phoneNumber) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Phone number is required",
-        },
+        { success: false, error: "phoneNumber is required" },
         { status: 400 },
       );
     }
 
-    // Fetch both sim swap status and device status in parallel
+    // Fetch Nokia APIs in parallel for speed
     const [simSwapData, deviceStatusData] = await Promise.all([
       getSimSwapStatus(phoneNumber, maxAge),
       getDeviceStatus(phoneNumber),
@@ -26,13 +23,39 @@ export async function POST(request: NextRequest) {
     console.log("SIM Swap Status:", simSwapData);
     console.log("Device Status:", deviceStatusData);
 
-    // Send successful response with both data
+    //  Normalize raw Nokia responses into standard signals
+    const signals = normalizeToSignals({
+      simSwap: simSwapData,
+      deviceStatus: deviceStatusData,
+    });
+
+    // Get AI-powered risk assessment
+    const assessment = await assessRisk(
+      signals,
+      "send_money", // use case for check-recipient
+      process.env.DEEPSEEK_API_KEY!,
+    );
+
+    // Return enriched response
     return NextResponse.json(
       {
+        success: true,
         data: {
           phoneNumber,
-          simSwap: simSwapData,
-          deviceStatus: deviceStatusData,
+          // AI decision
+          decision: {
+            risk: assessment.risk,
+            recommendation: assessment.recommendation,
+            reason: assessment.reason,
+          },
+          // Raw Nokia data (for debugging/transparency)
+          raw: {
+            simSwap: simSwapData,
+            deviceStatus: deviceStatusData,
+          },
+
+          // Signals used
+          signals: signals,
         },
       },
       { status: 200 },
@@ -40,9 +63,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error occurred: ", error);
     return NextResponse.json(
-      {
-        error: "Internal server error",
-      },
+      { success: false, error: "Internal server error" },
       { status: 500 },
     );
   }
