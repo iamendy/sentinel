@@ -1,4 +1,8 @@
 const page = () => {
-  return <div>App page </div>;
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      App page
+    </div>
+  );
 };
 export default page;

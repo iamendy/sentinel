@@ -96,4 +96,132 @@
   html {
     @apply font-sans;
   }
+
+  .illuminate {
+    content: "";
+    position: absolute;
+    background-image: radial-gradient(
+      50% 31.3% at 50% 50%,
+      rgba(255, 255, 255, 0.15) 0%,
+      #0d0e12,
+      rgb(13, 14, 18) 100%
+    );
+    border-radius: 200px;
+    bottom: 30px;
+    filter: blur(50px);
+    flex: none;
+    height: 150px;
+    left: 0;
+    overflow: visible;
+    position: absolute;
+    right: 0;
+    z-index: 0;
+  }
+
+  .feature::before {
+    display: none;
+    content: "";
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, black, white, black);
+    position: absolute;
+    top: 0;
+    left: calc(100%);
+  }
+
+  .card {
+    color: #8a8f98;
+    background: radial-gradient(
+      80.6% 40.3% at 100% 36%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .testimonials::before,
+  .testimonials::after {
+    position: absolute;
+    content: "";
+
+    width: 7px;
+    height: 100%;
+    background-color: black;
+    backdrop-filter: blur(8px);
+    z-index: 1;
+    box-shadow: 11px 0px 20px 18px rgba(0, 0, 0, 0.6);
+  }
+
+  .testimonials::before {
+    top: 0;
+    left: 0;
+  }
+
+  .testimonials::after {
+    top: 0;
+    right: 0;
+  }
+
+  .scale {
+    background: radial-gradient(
+      86.8056% 75% at 81.4% 103.5%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .pancake {
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .plan {
+    background: radial-gradient(
+      75% 50% at 50% 100%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .cross::before,
+  .cross::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    background-color: #55565a;
+    transform: translate(-50%, -50%);
+  }
+
+  .cross::before {
+    width: 1px;
+    height: 100%;
+  }
+
+  .cross::after {
+    width: 100%;
+    height: 1px;
+  }
+
+  .secured {
+    background: radial-gradient(
+      50% 50% at 40.2% 100%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  .subscribe {
+    background: radial-gradient(
+      50% 28.799999999999997% at 50% 0%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+  @media screen and (min-width: 1024px) {
+    .feature::before {
+      display: block;
+    }
+  }
 }

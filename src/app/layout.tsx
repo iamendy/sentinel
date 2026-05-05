@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+//@ts-ignore
 import "@/app/globals.css";
 import { Noto_Sans, Playfair_Display } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const playfairDisplayHeading = Playfair_Display({
   subsets: ["latin"],
@@ -51,7 +54,11 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          {children}
+          <div className=" pancake relative">
+            <Navbar />
+            <main className="pt-4 lg:pt-20">{children}</main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
