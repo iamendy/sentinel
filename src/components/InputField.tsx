@@ -2,20 +2,32 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 interface InputFieldProps {
+  label: string;
+  name: string;
   value: string;
-  onChange: (value: string) => void;
+  type?: string;
+  placeholder?: string;
+  onChange: (name: string, value: string) => void;
 }
 
-export function InputField({ value, onChange }: InputFieldProps) {
+export function InputField({
+  label,
+  name,
+  value,
+  type = "text",
+  placeholder,
+  onChange,
+}: InputFieldProps) {
   return (
     <Field>
-      <FieldLabel htmlFor="input">Phone number</FieldLabel>
+      <FieldLabel htmlFor={name}>{label}</FieldLabel>
       <Input
-        id="input"
-        type="text"
-        placeholder="+234803xxxxxx"
+        id={name}
+        name={name}
+        type={type}
+        placeholder={placeholder}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(name, e.target.value)}
       />
     </Field>
   );
