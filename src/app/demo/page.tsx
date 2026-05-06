@@ -10,6 +10,14 @@ import { ResultModal } from "@/components/ResultModal";
 import { Contact } from "@/types";
 import { serviceDescriptions, getFormFields } from "@/constants/services";
 import { contactToBatchFormat } from "@/utils";
+import {
+  useCheckRecipient,
+  useVerifyIdentity,
+  useGeofenceTransaction,
+  useBatchVerify,
+  useDeviceTrust,
+} from "@/hooks/query";
+import { Loader2 } from "lucide-react";
 
 // Map actions to button text
 const getButtonText = (action: string): string => {
@@ -23,9 +31,33 @@ const getButtonText = (action: string): string => {
     case "batch-verify":
       return "Batch Verify Contacts";
     case "device-trust":
-      return " Assess Device Trust";
+      return "Assess Device Trust";
     default:
       return "Verify";
+  }
+};
+
+// Map actions to their respective hooks
+const useActionHook = (action: string) => {
+  const checkRecipient = useCheckRecipient();
+  const verifyIdentity = useVerifyIdentity();
+  const geofenceTransaction = useGeofenceTransaction();
+  const batchVerify = useBatchVerify();
+  const deviceTrust = useDeviceTrust();
+
+  switch (action) {
+    case "check-recipient":
+      return checkRecipient;
+    case "verify-identity":
+      return verifyIdentity;
+    case "geofence-transaction":
+      return geofenceTransaction;
+    case "batch-verify":
+      return batchVerify;
+    case "device-trust":
+      return deviceTrust;
+    default:
+      return checkRecipient;
   }
 };
 
@@ -38,6 +70,9 @@ const Page = () => {
   const [selectedContactIds, setSelectedContactIds] = useState<Set<string>>(
     new Set(),
   );
+
+  // Get the appropriate hook based on selected action
+  const { mutateAsync, isPending } = useActionHook(selectedAction);
 
   const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -74,60 +109,68 @@ const Page = () => {
     const formFields = getFormFields(selectedAction);
     for (const field of formFields) {
       if (field.required && !formData[field.name]) {
-        alert(`Please select ${field.label.toLowerCase()}`);
+        alert(`Please enter ${field.label.toLowerCase()}`);
         return;
       }
     }
 
-    let requestBody = {};
-    switch (selectedAction) {
-      case "check-recipient":
-        requestBody = { phoneNumber: formData.phoneNumber };
-        break;
-      case "verify-identity":
-        requestBody = {
-          phoneNumber: formData.phoneNumber,
-          idNo: formData.idNo,
-        };
-        break;
-      case "geofence-transaction":
-        requestBody = {
-          phoneNumber: formData.phoneNumber,
-          latitude: formData.latitude,
-          longitude: formData.longitude,
-        };
-        break;
-      case "batch-verify":
-        if (!formData.contacts || formData.contacts.length === 0) {
-          alert("Please select at least one contact");
-          return;
-        }
-        requestBody = { contacts: formData.contacts };
-        break;
-      case "device-trust":
-        requestBody = {
-          phoneNumber: formData.phoneNumber,
-          latitude: formData.latitude,
-          longitude: formData.longitude,
-          radius: formData.radius,
-        };
-        break;
-    }
-
-    console.log("Request Body:", requestBody);
-
     try {
-      const mockResponse = {
-        risk: "HIGH",
-        recommendation: "BLOCK",
-        reason:
-          "This phone number's SIM was swapped 2 hours ago. Do not send money – this is a common fraud pattern.",
-      };
-      setVerificationResult(mockResponse);
+      let requestData;
+
+      switch (selectedAction) {
+        case "check-recipient":
+          requestData = { phoneNumber: formData.phoneNumber };
+          break;
+        case "verify-identity":
+          requestData = {
+            phoneNumber: formData.phoneNumber,
+            idNo: formData.idNo,
+          };
+          break;
+        case "geofence-transaction":
+          requestData = {
+            phoneNumber: formData.phoneNumber,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+          };
+          break;
+        case "batch-verify":
+          if (!formData.contacts || formData.contacts.length === 0) {
+            alert("Please select at least one contact");
+            return;
+          }
+          requestData = { contacts: formData.contacts };
+          break;
+        case "device-trust":
+          requestData = {
+            phoneNumber: formData.phoneNumber,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
+            radius: formData.radius,
+          };
+          break;
+        default:
+          return;
+      }
+
+      //@ts-ignore
+      const result = await mutateAsync(requestData);
+
+      // Handle batch verify response (array) vs single response
+      if (selectedAction === "batch-verify" && Array.isArray(result)) {
+        // For batch verify, you might want to show a summary
+        setVerificationResult(result[0]); // Or handle multiple results differently
+      } else {
+        setVerificationResult(result);
+      }
+
       setIsModalOpen(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      alert(
+        error?.response?.data?.message ||
+          "An error occurred. Please try again.",
+      );
     }
   };
 
@@ -179,7 +222,16 @@ const Page = () => {
           </div>
         ))}
 
-        <Button onClick={handleVerify}>{buttonText}</Button>
+        <Button onClick={handleVerify} disabled={isPending}>
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Verifying...
+            </>
+          ) : (
+            buttonText
+          )}
+        </Button>
       </div>
 
       <ResultModal

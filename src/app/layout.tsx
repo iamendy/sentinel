@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
+import { QueryProvider } from "@/providers/query-provider";
 const playfairDisplayHeading = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-heading",
@@ -56,7 +56,9 @@ export default function RootLayout({
         >
           <div className=" pancake relative">
             <Navbar />
-            <main className="pt-4 lg:pt-20">{children}</main>
+            <QueryProvider>
+              <main className="pt-4 lg:pt-20">{children}</main>
+            </QueryProvider>
             <Footer />
           </div>
         </ThemeProvider>

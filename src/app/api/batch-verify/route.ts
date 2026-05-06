@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { contacts } = await request.json();
 
+    console.log(contacts);
     // Validate contacts
     if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
       return NextResponse.json(
