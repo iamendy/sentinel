@@ -21,7 +21,7 @@ export default function Home() {
           <div className="my-9 lg:mb-11">
             <Link
               href="/demo"
-              className="bg-white text-sm rounded-lg leading-none px-4 py-3 lg:px-6 lg:py-3 lg:text-lg  text-gray-400 hover:bg-red hover:text-white transition-colors"
+              className="bg-white text-sm text-black rounded-lg leading-none px-4 py-3 lg:px-6 lg:py-3 lg:text-lg hover:bg-red hover:text-white transition-colors"
             >
               Try a demo
             </Link>
