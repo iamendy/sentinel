@@ -4,6 +4,9 @@ import {
   getDeviceSwapStatus,
   verifyLocation,
 } from "@/lib/nnac";
+import { assessRisk } from "@/lib/risk-engine/assessment";
+import { NormalizedSignals } from "@/lib/risk-engine/signals";
+import { normalizeToSignals } from "@/lib/risk-engine/signals";
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,9 +28,14 @@ export async function POST(request: NextRequest) {
     // Validate location parameters if provided
     const hasLocationParams = latitude && longitude;
 
+    let deviceStatusData;
+    let deviceSwapData;
+    let locationVerificationData = null;
+    let signals: NormalizedSignals;
+
     if (hasLocationParams) {
       // Fetch device status, device swap, and location verification in parallel
-      const [deviceStatusData, deviceSwapData, locationVerificationData] =
+      [deviceStatusData, deviceSwapData, locationVerificationData] =
         await Promise.all([
           getDeviceStatus(phoneNumber),
           getDeviceSwapStatus(phoneNumber, maxAge),
@@ -38,22 +46,15 @@ export async function POST(request: NextRequest) {
       console.log("Device Swap Status:", deviceSwapData);
       console.log("Location Verification:", locationVerificationData);
 
-      // Send successful response with all data
-      return NextResponse.json(
-        {
-          success: true,
-          data: {
-            phoneNumber,
-            deviceStatus: deviceStatusData,
-            deviceSwap: deviceSwapData,
-            locationVerification: locationVerificationData,
-          },
-        },
-        { status: 200 },
-      );
+      //  Normalize raw Nokia responses into standard signals
+      signals = normalizeToSignals({
+        deviceSwap: deviceSwapData,
+        deviceStatus: deviceStatusData,
+        locationVerification: locationVerificationData,
+      });
     } else {
       // Fetch only device status and device swap (no location verification)
-      const [deviceStatusData, deviceSwapData] = await Promise.all([
+      [deviceStatusData, deviceSwapData] = await Promise.all([
         getDeviceStatus(phoneNumber),
         getDeviceSwapStatus(phoneNumber, maxAge),
       ]);
@@ -61,19 +62,56 @@ export async function POST(request: NextRequest) {
       console.log("Device Status:", deviceStatusData);
       console.log("Device Swap Status:", deviceSwapData);
 
-      // Send successful response with device data only
-      return NextResponse.json(
-        {
-          success: true,
-          data: {
-            phoneNumber,
-            deviceStatus: deviceStatusData,
-            deviceSwap: deviceSwapData,
-          },
-        },
-        { status: 200 },
-      );
+      // Normalize signals for device trust use case (no location)
+      signals = normalizeToSignals({
+        deviceSwap: deviceSwapData,
+        deviceStatus: deviceStatusData,
+      });
     }
+
+    // Assess risk using AI
+    const riskAssessment = await assessRisk(signals, "device_trust");
+
+    // Prepare enriched response
+    // Prepare enriched response with the specific pattern
+    const responseData = {
+      success: true,
+      data: {
+        phoneNumber,
+        decision: {
+          risk: riskAssessment.risk,
+          recommendation: riskAssessment.recommendation,
+          reason: riskAssessment.reason,
+        },
+        raw: {
+          deviceSwap: {
+            swapped: deviceSwapData?.swapped ?? false,
+          },
+          deviceStatus: {
+            connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
+            reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
+            lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
+          },
+          ...(locationVerificationData && {
+            locationVerification: {
+              verificationResult:
+                locationVerificationData?.verificationResult ?? null,
+              lastLocationTime:
+                locationVerificationData?.lastLocationTime ?? null,
+            },
+          }),
+        },
+      },
+    };
+
+    // Log the assessment result
+    console.log(`Device Trust Assessment for ${phoneNumber}:`, {
+      risk: riskAssessment.risk,
+      recommendation: riskAssessment.recommendation,
+      reason: riskAssessment.reason,
+    });
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (error) {
     console.error("Error occurred: ", error);
     return NextResponse.json(

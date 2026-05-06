@@ -33,7 +33,6 @@ export async function POST(request: NextRequest) {
     const assessment = await assessRisk(
       signals,
       "send_money", // use case for check-recipient
-      process.env.DEEPSEEK_API_KEY!,
     );
 
     // Return enriched response
@@ -53,9 +52,6 @@ export async function POST(request: NextRequest) {
             simSwap: simSwapData,
             deviceStatus: deviceStatusData,
           },
-
-          // Signals used
-          signals: signals,
         },
       },
       { status: 200 },

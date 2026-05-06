@@ -90,8 +90,9 @@ function ruleBasedAssessment(
 export async function assessRisk(
   signals: NormalizedSignals,
   useCase: UseCase,
-  deepseekApiKey: string,
 ): Promise<RiskAssessment> {
+  const deepseekApiKey = process.env.DEEPSEEK_API_KEY!;
+
   // If no API key, use rules only
   if (!deepseekApiKey || deepseekApiKey === "") {
     console.log("No DeepSeek API key, using rule-based assessment");
