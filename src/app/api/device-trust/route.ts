@@ -73,34 +73,30 @@ export async function POST(request: NextRequest) {
     const riskAssessment = await assessRisk(signals, "device_trust");
 
     // Prepare enriched response
-    // Prepare enriched response with the specific pattern
     const responseData = {
-      success: true,
-      data: {
-        phoneNumber,
-        decision: {
-          risk: riskAssessment.risk,
-          recommendation: riskAssessment.recommendation,
-          reason: riskAssessment.reason,
+      phoneNumber,
+      decision: {
+        risk: riskAssessment.risk,
+        recommendation: riskAssessment.recommendation,
+        reason: riskAssessment.reason,
+      },
+      raw: {
+        deviceSwap: {
+          swapped: deviceSwapData?.swapped ?? false,
         },
-        raw: {
-          deviceSwap: {
-            swapped: deviceSwapData?.swapped ?? false,
-          },
-          deviceStatus: {
-            connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
-            reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
-            lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
-          },
-          ...(locationVerificationData && {
-            locationVerification: {
-              verificationResult:
-                locationVerificationData?.verificationResult ?? null,
-              lastLocationTime:
-                locationVerificationData?.lastLocationTime ?? null,
-            },
-          }),
+        deviceStatus: {
+          connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
+          reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
+          lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
         },
+        ...(locationVerificationData && {
+          locationVerification: {
+            verificationResult:
+              locationVerificationData?.verificationResult ?? null,
+            lastLocationTime:
+              locationVerificationData?.lastLocationTime ?? null,
+          },
+        }),
       },
     };
 

@@ -9,22 +9,22 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ActivityIcon, BotIcon, TriangleAlert } from "lucide-react";
+import { SentinelResponse } from "@/types";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   selectedAction: string;
-  phoneNumber: string;
-  result: any;
+  result: SentinelResponse;
 }
 
 export const ResultModal = ({
   isOpen,
   onClose,
   selectedAction,
-  phoneNumber,
   result,
 }: Props) => {
+  result && console.log(result);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md" showCloseButton={false}>
@@ -34,7 +34,7 @@ export const ResultModal = ({
             <span className="flex items-center gap-x-2">
               <ActivityIcon className="h-4 w-4" /> {selectedAction || "N/A"}
             </span>{" "}
-            • {phoneNumber || "N/A"}
+            • {result?.phoneNumber || "N/A"}
           </DialogDescription>
         </DialogHeader>
 
@@ -42,9 +42,9 @@ export const ResultModal = ({
           <div className="flex justify-center items-center">
             <TriangleAlert
               className={`h-12 w-12 ${
-                result?.risk === "HIGH"
+                result?.decision?.risk === "HIGH"
                   ? "text-red"
-                  : result?.risk === "MEDIUM"
+                  : result?.decision?.risk === "MEDIUM"
                   ? "text-yellow-500"
                   : "text-green-500"
               }`}
@@ -52,7 +52,7 @@ export const ResultModal = ({
           </div>
           <div className="text-center bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {result?.reason}
+              {result?.decision?.reason}
             </p>
           </div>
 
@@ -64,14 +64,14 @@ export const ResultModal = ({
               </div>
               <div
                 className={`font-bold text-center ${
-                  result?.recommendation === "BLOCK"
+                  result?.decision?.recommendation === "BLOCK"
                     ? "text-red"
-                    : result?.recommendation === "CAUTION"
+                    : result?.decision?.recommendation === "CAUTION"
                     ? "text-yellow-500"
                     : "text-green-500"
                 }`}
               >
-                {result?.recommendation || "N/A"}
+                {result?.decision?.recommendation || "N/A"}
               </div>
             </div>
           </div>

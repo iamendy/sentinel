@@ -238,7 +238,6 @@ const Page = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         selectedAction={selectedAction}
-        phoneNumber={formData.phoneNumber || "N/A"}
         result={verificationResult}
       />
     </div>

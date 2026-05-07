@@ -38,20 +38,17 @@ export async function POST(request: NextRequest) {
     // Return enriched response
     return NextResponse.json(
       {
-        success: true,
-        data: {
-          phoneNumber,
-          // AI decision
-          decision: {
-            risk: assessment.risk,
-            recommendation: assessment.recommendation,
-            reason: assessment.reason,
-          },
-          // Raw Nokia data (for debugging/transparency)
-          raw: {
-            simSwap: simSwapData,
-            deviceStatus: deviceStatusData,
-          },
+        phoneNumber,
+        // AI decision
+        decision: {
+          risk: assessment.risk,
+          recommendation: assessment.recommendation,
+          reason: assessment.reason,
+        },
+        // Raw Nokia data (for debugging/transparency)
+        raw: {
+          simSwap: simSwapData,
+          deviceStatus: deviceStatusData,
         },
       },
       { status: 200 },

@@ -59,33 +59,30 @@ export async function POST(request: NextRequest) {
     // Assess risk using AI for location_check use case
     const riskAssessment = await assessRisk(signals, "location_check");
 
-    // Prepare enriched response with the specific pattern
+    // Prepare enriched response
     const responseData = {
-      success: true,
-      data: {
-        phoneNumber,
-        decision: {
-          risk: riskAssessment.risk,
-          recommendation: riskAssessment.recommendation,
-          reason: riskAssessment.reason,
+      phoneNumber,
+      decision: {
+        risk: riskAssessment.risk,
+        recommendation: riskAssessment.recommendation,
+        reason: riskAssessment.reason,
+      },
+      raw: {
+        location: {
+          latitude: actualLatitude ?? null,
+          longitude: actualLongitude ?? null,
+          timestamp: locationData?.timestamp ?? null,
         },
-        raw: {
-          location: {
-            latitude: actualLatitude ?? null,
-            longitude: actualLongitude ?? null,
-            timestamp: locationData?.timestamp ?? null,
-          },
-          deviceStatus: {
-            connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
-            reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
-            lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
-          },
-          geofence: {
-            expectedLatitude,
-            expectedLongitude,
-            radius: providedRadius,
-            withinGeofence: locationVerified,
-          },
+        deviceStatus: {
+          connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
+          reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
+          lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
+        },
+        geofence: {
+          expectedLatitude,
+          expectedLongitude,
+          radius: providedRadius,
+          withinGeofence: locationVerified,
         },
       },
     };

@@ -42,28 +42,25 @@ export async function POST(request: NextRequest) {
 
     // Prepare enriched response with the specific pattern
     const responseData = {
-      success: true,
-      data: {
-        phoneNumber,
-        decision: {
-          risk: riskAssessment.risk,
-          recommendation: riskAssessment.recommendation,
-          reason: riskAssessment.reason,
+      phoneNumber,
+      decision: {
+        risk: riskAssessment.risk,
+        recommendation: riskAssessment.recommendation,
+        reason: riskAssessment.reason,
+      },
+      raw: {
+        kycMatch: {
+          match: kycData?.match ?? false,
+          ...(kycData?.matchScore && { matchScore: kycData.matchScore }),
         },
-        raw: {
-          kycMatch: {
-            match: kycData?.match ?? false,
-            ...(kycData?.matchScore && { matchScore: kycData.matchScore }),
-          },
-          simSwap: {
-            swapped: simSwapData?.swapped ?? false,
-            ...(simSwapData?.swappedAt && { swappedAt: simSwapData.swappedAt }),
-          },
-          deviceStatus: {
-            connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
-            reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
-            lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
-          },
+        simSwap: {
+          swapped: simSwapData?.swapped ?? false,
+          ...(simSwapData?.swappedAt && { swappedAt: simSwapData.swappedAt }),
+        },
+        deviceStatus: {
+          connectivityStatus: deviceStatusData?.connectivityStatus ?? null,
+          reachabilityStatus: deviceStatusData?.reachabilityStatus ?? null,
+          lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
         },
       },
     };

@@ -61,7 +61,6 @@ export async function POST(request: NextRequest) {
           // Prepare enriched response for this contact
           return {
             phoneNumber,
-            success: true,
             decision: {
               risk: riskAssessment.risk,
               recommendation: riskAssessment.recommendation,
@@ -119,13 +118,10 @@ export async function POST(request: NextRequest) {
     // Send successful response with all results
     return NextResponse.json(
       {
-        success: true,
-        data: {
-          total: results.length,
-          successful: results.filter((r) => r.success).length,
-          failed: results.filter((r) => !r.success).length,
-          results,
-        },
+        total: results.length,
+        successful: results.filter((r) => r.success).length,
+        failed: results.filter((r) => !r.success).length,
+        results,
       },
       { status: 200 },
     );
