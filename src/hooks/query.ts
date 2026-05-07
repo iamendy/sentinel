@@ -1,16 +1,18 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import {
-  checkRecipient,
-  verifyIdentity,
-  geofenceTransaction,
-  batchVerify,
-  deviceTrust,
   CheckRecipientRequest,
   VerifyIdentityRequest,
   GeofenceTransactionRequest,
   BatchVerifyRequest,
   DeviceTrustRequest,
   SentinelResponse,
+} from "@/types";
+import {
+  checkRecipient,
+  verifyIdentity,
+  geofenceTransaction,
+  batchVerify,
+  deviceTrust,
 } from "@/services/api";
 import { queryKeys } from "@/constants/query-keys";
 
