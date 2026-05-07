@@ -1,5 +1,7 @@
 ## Sentinel - Fraud Prevention API Suite
 
+🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video In Progress](https://#) | 📊 [Pitch Slides In Progress](https:#)
+
 Sentinel is the 'Guardian Angel' for African mobile money. It gives every SME and fintech the power of a fraud detective in a single, simple API call.
 
 ## Objective
@@ -22,9 +24,9 @@ The AI engine converts a combination of Nokia NAC signals (SIM swap status, numb
 
 ### Sentinel Endpoints to Nokia NaC API Mapping
 
-| Sentinel Endpoint       | Use Case                               | Nokia Nac APIs Used                                 |
-| ----------------------- | -------------------------------------- | --------------------------------------------------- | -------------------------- |
-| `/check-recipient`      | Pre-transaction recipient safety check | SIM Swap + Device Status                            | High-Priority + Additional |
+| Sentinel Endpoint       | Use Case                               | Nokia NaC APIs Used                                 |
+| ----------------------- | -------------------------------------- | --------------------------------------------------- |
+| `/check-recipient`      | Pre-transaction recipient safety check | SIM Swap + Device Status                            |
 | `/verify-identity`      | Passwordless KYC for SME onboarding    | KYC Match + SIM Swap + Device Status                |
 | `/geofence-transaction` | Location-based transaction approval    | Location Retrieval + Device Status                  |
 | `/batch-verify`         | Bulk phone number risk screening       | SIM Swap + KYC Match                                |
