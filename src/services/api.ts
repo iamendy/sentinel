@@ -77,6 +77,7 @@ export const batchVerify = async (
       "/batch-verify",
       data,
     );
+    console.log(response);
     return response;
   } catch (error) {
     console.error("Batch verify error:", error);

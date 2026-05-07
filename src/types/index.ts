@@ -78,23 +78,12 @@ export interface SentinelResponse {
       match: boolean;
       matchScore?: number;
     };
-    location?: {
-      latitude: number | null;
-      longitude: number | null;
-      timestamp: string | null;
-    };
-    locationVerification?: {
-      verificationResult: string;
-      lastLocationTime: string;
-    };
-    deviceSwap?: {
-      swapped: boolean;
-    };
-    geofence?: {
-      expectedLatitude: number;
-      expectedLongitude: number;
-      radius: number;
-      withinGeofence: boolean;
-    };
   };
+}
+
+export interface BatchVerificationResponse {
+  total: number;
+  successful: number;
+  failed: number;
+  results: SentinelResponse[];
 }

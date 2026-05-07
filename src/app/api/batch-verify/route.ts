@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { contacts } = await request.json();
 
-    console.log(contacts);
     // Validate contacts
     if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
       return NextResponse.json(
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Process each contact with parallel sim swap, device status, and KYC verification
+    // Process each contact with parallel sim swap, device status, and KYC verification for speed
     const results = await Promise.all(
       contacts.map(async (contact) => {
         const { phoneNumber, idNo, gender, name, maxAge } = contact;
@@ -60,6 +59,7 @@ export async function POST(request: NextRequest) {
 
           // Prepare enriched response for this contact
           return {
+            success: true,
             phoneNumber,
             decision: {
               risk: riskAssessment.risk,
@@ -93,27 +93,13 @@ export async function POST(request: NextRequest) {
         } catch (error) {
           console.error(`Error processing ${phoneNumber}:`, error);
           return {
-            phoneNumber,
             success: false,
+            phoneNumber,
             error: error instanceof Error ? error.message : "Failed to verify",
           };
         }
       }),
     );
-
-    // Check if any successful results
-    const hasSuccessfulResults = results.some((result) => result.success);
-
-    if (!hasSuccessfulResults) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "All verifications failed",
-          results,
-        },
-        { status: 500 },
-      );
-    }
 
     // Send successful response with all results
     return NextResponse.json(
