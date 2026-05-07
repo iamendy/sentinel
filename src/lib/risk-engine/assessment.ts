@@ -183,7 +183,7 @@ Return risk assessment as JSON.`;
       // Ensure risk is one of the valid values
       const validRisks = ["HIGH", "MEDIUM", "LOW"];
       const validRecommendations = ["BLOCK", "CAUTION", "SAFE"];
-      console.log("AI exexcuted");
+
       return {
         risk: validRisks.includes(result.risk) ? result.risk : "LOW",
         recommendation: validRecommendations.includes(result.recommendation)

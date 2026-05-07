@@ -121,7 +121,9 @@ export const BatchResultCard = ({
               <span className="text-gray-400">KYC:</span>
               <span
                 className={
-                  result.raw.kycMatch.match ? "text-green-500" : "text-red-500"
+                  result.raw.kycMatch.match === "true"
+                    ? "text-green-500"
+                    : "text-red-500"
                 }
               >
                 {result.raw.kycMatch.match ? "Match" : "No Match"}

@@ -51,7 +51,6 @@ export async function POST(request: NextRequest) {
       raw: {
         kycMatch: {
           match: kycData?.match ?? false,
-          ...(kycData?.matchScore && { matchScore: kycData.matchScore }),
         },
         simSwap: {
           swapped: simSwapData?.swapped ?? false,

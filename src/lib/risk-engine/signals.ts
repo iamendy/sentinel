@@ -34,6 +34,7 @@ export interface NormalizedSignals {
 export function normalizeToSignals(
   raw: RawNokiaNacResponses,
 ): NormalizedSignals {
+  console.log(raw.kycMatch);
   return {
     // SIM Swap
     simSwapped: raw.simSwap?.swapped ?? false,
@@ -45,9 +46,9 @@ export function normalizeToSignals(
 
     // KYC Match (null if not provided)
     kycMatch:
-      raw.kycMatch?.idDocumentMatch === "true"
+      raw.kycMatch?.idDocumentMatch == "true"
         ? true
-        : raw.kycMatch?.idDocumentMatch === "false"
+        : raw.kycMatch?.idDocumentMatch == "false"
         ? false
         : null,
 

@@ -8,6 +8,7 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { contacts } = await request.json();
 
+    console.log(contacts);
     // Validate contacts
     if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
       return NextResponse.json(
@@ -82,10 +83,7 @@ export async function POST(request: NextRequest) {
               },
               ...(kycData && {
                 kycMatch: {
-                  match: kycData?.match ?? false,
-                  ...(kycData?.matchScore && {
-                    matchScore: kycData.matchScore,
-                  }),
+                  match: kycData?.idDocumentMatch ?? false,
                 },
               }),
             },
