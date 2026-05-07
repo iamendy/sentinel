@@ -6,6 +6,7 @@ export type UseCase =
   | "location_check"
   | "batch_verify"
   | "device_trust";
+
 export type RiskLevel = "HIGH" | "MEDIUM" | "LOW";
 export type Recommendation = "BLOCK" | "CAUTION" | "SAFE";
 
@@ -182,7 +183,7 @@ Return risk assessment as JSON.`;
       // Ensure risk is one of the valid values
       const validRisks = ["HIGH", "MEDIUM", "LOW"];
       const validRecommendations = ["BLOCK", "CAUTION", "SAFE"];
-
+      console.log("AI exexcuted");
       return {
         risk: validRisks.includes(result.risk) ? result.risk : "LOW",
         recommendation: validRecommendations.includes(result.recommendation)
@@ -193,7 +194,7 @@ Return risk assessment as JSON.`;
     }
     throw new Error("Invalid AI response format");
   } catch (error) {
-    console.error("DeepSeek assessment failed, falling back to rules:", error);
+    console.log("AI assessment error, falling back to rules:", error);
     return ruleBasedAssessment(signals, useCase);
   }
 }

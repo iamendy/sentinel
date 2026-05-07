@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSimSwapStatus, verifyKycMatch } from "@/lib/nnac";
+import { getSimSwapStatus, getDeviceStatus, verifyKycMatch } from "@/lib/nnac";
+import { assessRisk } from "@/lib/risk-engine/assessment";
+import { normalizeToSignals } from "@/lib/risk-engine/signals";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Process each contact with parallel sim swap and KYC verification
+    // Process each contact with parallel sim swap, device status, and KYC verification
     const results = await Promise.all(
       contacts.map(async (contact) => {
         const { phoneNumber, idNo, gender, name, maxAge } = contact;
@@ -33,21 +35,60 @@ export async function POST(request: NextRequest) {
         }
 
         try {
-          // Fetch both sim swap status and KYC verification in parallel
-          const [simSwapData, kycData] = await Promise.all([
+          // Fetch sim swap status, device status, and KYC verification in parallel
+          const [simSwapData, deviceStatusData, kycData] = await Promise.all([
             getSimSwapStatus(phoneNumber, maxAge),
-            verifyKycMatch(phoneNumber, idNo, gender, name),
+            getDeviceStatus(phoneNumber),
+            idNo
+              ? verifyKycMatch(phoneNumber, idNo, gender, name)
+              : Promise.resolve(null),
           ]);
 
           console.log(`SIM Swap Status for ${phoneNumber}:`, simSwapData);
+          console.log(`Device Status for ${phoneNumber}:`, deviceStatusData);
           console.log(`KYC Status for ${phoneNumber}:`, kycData);
 
+          // Normalize raw Nokia responses into standard signals
+          const signals = normalizeToSignals({
+            simSwap: simSwapData,
+            deviceStatus: deviceStatusData,
+            ...(kycData && { kycMatch: kycData }),
+          });
+
+          // Assess risk using AI for batch_verify use case
+          const riskAssessment = await assessRisk(signals, "batch_verify");
+
+          // Prepare enriched response for this contact
           return {
             phoneNumber,
             success: true,
-            data: {
-              simSwap: simSwapData,
-              kyc: kycData,
+            decision: {
+              risk: riskAssessment.risk,
+              recommendation: riskAssessment.recommendation,
+              reason: riskAssessment.reason,
+            },
+            raw: {
+              simSwap: {
+                swapped: simSwapData?.swapped ?? false,
+                ...(simSwapData?.swappedAt && {
+                  swappedAt: simSwapData.swappedAt,
+                }),
+              },
+              deviceStatus: {
+                connectivityStatus:
+                  deviceStatusData?.connectivityStatus ?? null,
+                reachabilityStatus:
+                  deviceStatusData?.reachabilityStatus ?? null,
+                lastStatusTime: deviceStatusData?.lastStatusTime ?? null,
+              },
+              ...(kycData && {
+                kycMatch: {
+                  match: kycData?.match ?? false,
+                  ...(kycData?.matchScore && {
+                    matchScore: kycData.matchScore,
+                  }),
+                },
+              }),
             },
           };
         } catch (error) {
