@@ -28,7 +28,7 @@ export default function SelectAction({ value, onChange }: SelectActionProps) {
   ];
 
   return (
-    <FieldGroup className="w-full max-w-xs">
+    <FieldGroup className="w-full ">
       <Field>
         <Select value={value} onValueChange={onChange}>
           <SelectTrigger>

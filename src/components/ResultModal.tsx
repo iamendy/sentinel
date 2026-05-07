@@ -118,7 +118,7 @@ export const ResultModal = ({
           )}
         </div>
 
-        <DialogFooter className="sm:justify-between">
+        <DialogFooter className="">
           <Button variant="default" onClick={onClose}>
             Okay
           </Button>

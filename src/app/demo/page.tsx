@@ -181,7 +181,7 @@ const Page = () => {
   const buttonText = getButtonText(selectedAction);
 
   return (
-    <div className="px-4 mt-4">
+    <div className="px-4 mt-4 lg:max-w-xl mx-auto">
       <div className="border px-4 py-4 flex flex-col gap-y-8">
         <SelectAction value={selectedAction} onChange={setSelectedAction} />
 
@@ -226,7 +226,7 @@ const Page = () => {
           {isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Verifying...
+              Running Sentinel Magic ✨
             </>
           ) : (
             buttonText

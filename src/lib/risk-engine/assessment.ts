@@ -27,7 +27,7 @@ function ruleBasedAssessment(
       risk: "HIGH",
       recommendation: "BLOCK",
       reason:
-        "This phone number's SIM was recently swapped. This is a common fraud pattern. Do not proceed.",
+        "This phone number's SIM was recently swapped. This is a common fraud pattern. Verify via a phone call",
     };
   }
 

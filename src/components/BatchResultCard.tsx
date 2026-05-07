@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { CheckCircle2, XCircle, AlertCircle, BotIcon } from "lucide-react";
 import { contactLists } from "@/constants/contacts";
 import { Contact } from "@/types";
 
@@ -43,7 +43,7 @@ export const BatchResultCard = ({
   const getStatusBadge = (recommendation: string) => {
     switch (recommendation) {
       case "BLOCK":
-        return "bg-red-500/20 text-red-500 border-red/30";
+        return "bg-red/20 text-red border-red/30";
       case "CAUTION":
         return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
       default:
@@ -56,13 +56,13 @@ export const BatchResultCard = ({
 
   return (
     <div
-      className={`p-4 rounded-lg border transition-all duration-200 hover:scale-[1.02] ${getRiskColor(
-        result.decision?.risk,
-      )}`}
+      className={`p-4 rounded-lg border ${getRiskColor(result.decision?.risk)}`}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="text-sm font-medium text-gray-300">{contactName}</div>
+          <div className="text-sm font-medium text-gray-300">
+            <BotIcon />
+          </div>
           <div
             className={`text-xs px-2 py-0.5 rounded-full border ${getStatusBadge(
               result.decision?.recommendation,
@@ -123,10 +123,10 @@ export const BatchResultCard = ({
                 className={
                   result.raw.kycMatch.match === "true"
                     ? "text-green-500"
-                    : "text-red-500"
+                    : "text-white"
                 }
               >
-                {result.raw.kycMatch.match ? "Match" : "No Match"}
+                {result.raw.kycMatch.match === "true" ? "Match" : "Invalid"}
               </span>
             </div>
           )}
