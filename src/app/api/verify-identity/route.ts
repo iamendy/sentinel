@@ -37,6 +37,8 @@ export async function POST(request: NextRequest) {
       deviceStatus: deviceStatusData,
     });
 
+    console.log(signals);
+
     // Assess risk using AI for onboarding/verify identity use case
     const riskAssessment = await assessRisk(signals, "onboarding");
 

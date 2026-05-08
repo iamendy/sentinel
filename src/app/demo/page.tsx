@@ -4,20 +4,16 @@ import { useState } from "react";
 import SelectAction from "@/components/SelectAction";
 import { InputField } from "@/components/InputField";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { ServiceDescription } from "@/components/ServiceDescription";
 import { BatchVerifyButtons } from "@/components/BatchVerifyButtons";
 import { ResultModal } from "@/components/ResultModal";
-import { Contact } from "@/types";
+import { useActionHook } from "@/hooks/services";
 import { serviceDescriptions, getFormFields } from "@/constants/services";
 import { contactToBatchFormat } from "@/utils";
-import {
-  useCheckRecipient,
-  useVerifyIdentity,
-  useGeofenceTransaction,
-  useBatchVerify,
-  useDeviceTrust,
-} from "@/hooks/query";
 import { Loader2 } from "lucide-react";
+import { Contact } from "@/types";
+import { getMockDataForAction } from "@/lib/utils";
 
 // Map actions to button text
 const getButtonText = (action: string): string => {
@@ -37,30 +33,6 @@ const getButtonText = (action: string): string => {
   }
 };
 
-// Map actions to their respective hooks
-const useActionHook = (action: string) => {
-  const checkRecipient = useCheckRecipient();
-  const verifyIdentity = useVerifyIdentity();
-  const geofenceTransaction = useGeofenceTransaction();
-  const batchVerify = useBatchVerify();
-  const deviceTrust = useDeviceTrust();
-
-  switch (action) {
-    case "check-recipient":
-      return checkRecipient;
-    case "verify-identity":
-      return verifyIdentity;
-    case "geofence-transaction":
-      return geofenceTransaction;
-    case "batch-verify":
-      return batchVerify;
-    case "device-trust":
-      return deviceTrust;
-    default:
-      return checkRecipient;
-  }
-};
-
 const Page = () => {
   const [selectedAction, setSelectedAction] =
     useState<string>("check-recipient");
@@ -70,6 +42,7 @@ const Page = () => {
   const [selectedContactIds, setSelectedContactIds] = useState<Set<string>>(
     new Set(),
   );
+  const [autoPopulate, setAutoPopulate] = useState<boolean>(false);
 
   // Get the appropriate hook based on selected action
   const { mutateAsync, isPending } = useActionHook(selectedAction);
@@ -99,6 +72,40 @@ const Page = () => {
 
     setSelectedContactIds(newSelectedIds);
   };
+
+  // Handle auto-populate toggle
+  const handleAutoPopulateToggle = (checked: boolean) => {
+    setAutoPopulate(checked);
+
+    if (checked) {
+      // Auto-populate fields with mock data
+      const mockData = getMockDataForAction(selectedAction);
+      setFormData(mockData);
+
+      // Clear any selected contacts for batch-verify when auto-populating
+      if (selectedAction === "batch-verify") {
+        setSelectedContactIds(new Set());
+      }
+    } else {
+      // Clear form data when turning off
+      setFormData({});
+      setSelectedContactIds(new Set());
+    }
+  };
+
+  // Effect to handle action changes when auto-populate is on
+  useState(() => {
+    if (autoPopulate) {
+      const mockData = getMockDataForAction(selectedAction);
+      setFormData(mockData);
+
+      // Reset contacts for batch-verify when switching actions
+      if (selectedAction === "batch-verify") {
+        setSelectedContactIds(new Set());
+      }
+    }
+    //@ts-ignore
+  }, [selectedAction, autoPopulate]);
 
   const handleVerify = async () => {
     if (!selectedAction) {
@@ -186,6 +193,23 @@ const Page = () => {
         <SelectAction value={selectedAction} onChange={setSelectedAction} />
 
         {currentService && <ServiceDescription service={currentService} />}
+
+        {selectedAction !== "batch-verify" && (
+          <div className="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg border border-gray-800">
+            <div className="flex flex-col gap-y-1">
+              <span className="text-sm font-medium text-white">
+                Auto-populate Demo Data
+              </span>
+              <span className="text-xs text-gray-400">
+                Toggle on to automatically fill form fields with sample data
+              </span>
+            </div>
+            <Switch
+              checked={autoPopulate}
+              onCheckedChange={handleAutoPopulateToggle}
+            />
+          </div>
+        )}
 
         {formFields.map((field) => (
           <div key={field.name}>

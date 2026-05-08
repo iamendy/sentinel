@@ -2,7 +2,7 @@
 
 🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video In Progress](https:#) | 📊 [Pitch Slides In Progress](https:#)
 
-Sentinel is the 'Guardian Angel' for African mobile money. It gives every SME and fintech the power of a fraud detective in a single, simple API call.
+Sentinel is the 'Guardian Angel' for African mobile money. It gives every SME and fintech the power of a fraud detective in simple API calls.
 
 ## Objective
 
@@ -49,7 +49,7 @@ curl -X POST https://sentinelafrica.vercel.app/api/check-recipient \
   "decision": {
     "risk": "HIGH",
     "recommendation": "BLOCK",
-    "reason": "A recent SIM swap was detected, which is a common fraud tactic."
+    "reason": "A recent SIM swap was detected, which is a common fraud tactic. Verify via a phone call"
   },
   "raw": {
     "simSwap": { "swapped": true },

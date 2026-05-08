@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const { contacts } = await request.json();
 
-    console.log(contacts);
     // Validate contacts
     if (!contacts || !Array.isArray(contacts) || contacts.length === 0) {
       return NextResponse.json(
@@ -55,6 +54,7 @@ export async function POST(request: NextRequest) {
             ...(kycData && { kycMatch: kycData }),
           });
 
+          console.log(signals);
           // Assess risk using AI for batch_verify use case
           const riskAssessment = await assessRisk(signals, "batch_verify");
 

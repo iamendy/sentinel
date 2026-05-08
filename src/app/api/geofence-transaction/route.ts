@@ -32,14 +32,14 @@ export async function POST(request: NextRequest) {
     // Simple location comparison - just check if coordinates match exactly (simulation mode)
     const expectedLatitude = parseFloat(latitude);
     const expectedLongitude = parseFloat(longitude);
-    const actualLatitude = locationData?.latitude;
-    const actualLongitude = locationData?.longitude;
-    const providedRadius = radius ? parseFloat(radius) : 50000;
+    const actualLatitude = locationData?.area?.center?.latitude;
+    const actualLongitude = locationData?.area?.center?.longitude;
+    const providedRadius = radius ? parseFloat(radius) : 1000;
 
     // Simple check for simulation - coordinates match exactly or not
     const locationVerified =
-      actualLatitude === expectedLatitude &&
-      actualLongitude === expectedLongitude;
+      actualLatitude == expectedLatitude &&
+      actualLongitude == expectedLongitude;
 
     console.log(`Location comparison:`, {
       expected: { lat: expectedLatitude, lng: expectedLongitude },
