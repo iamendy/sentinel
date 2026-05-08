@@ -1,6 +1,6 @@
 ## Sentinel - Fraud Prevention API Suite
 
-🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video In Progress](https://#) | 📊 [Pitch Slides In Progress](https:#)
+🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video In Progress](https:#) | 📊 [Pitch Slides In Progress](https:#)
 
 Sentinel is the 'Guardian Angel' for African mobile money. It gives every SME and fintech the power of a fraud detective in a single, simple API call.
 
@@ -32,27 +32,31 @@ The AI engine converts a combination of Nokia NAC signals (SIM swap status, numb
 | `/batch-verify`         | Bulk phone number risk screening       | SIM Swap + KYC Match                                |
 | `/device-trust`         | Device compromise assessment           | Device Status + Device Swap + Location Verification |
 
+### Example API Request (`/check-recipient`)
+
+```
+curl -X POST https://sentinelafrica.vercel.app/api/check-recipient \
+  -H "Content-Type: application/json" \
+  -d '{"phoneNumber": "+99999991000"}'
+
+```
+
 ### Example API Response (`/check-recipient`)
 
 ```json
 {
-  "success": true,
-  "data": {
-    "phoneNumber": "+99999991000",
-    "decision": {
-      "risk": "HIGH",
-      "recommendation": "BLOCK",
-      "reason": "This phone number's SIM was recently swapped. This is a common fraud pattern. Verify via a phone call"
-    },
-    "raw": {
-      "simSwap": {
-        "swapped": true
-      },
-      "deviceStatus": {
-        "connectivityStatus": "CONNECTED_SMS",
-        "reachabilityStatus": null,
-        "lastStatusTime": null
-      }
+  "phoneNumber": "+99999991000",
+  "decision": {
+    "risk": "HIGH",
+    "recommendation": "BLOCK",
+    "reason": "A recent SIM swap was detected, which is a common fraud tactic."
+  },
+  "raw": {
+    "simSwap": { "swapped": true },
+    "deviceStatus": {
+      "connectivityStatus": "CONNECTED_SMS",
+      "reachabilityStatus": null,
+      "lastStatusTime": null
     }
   }
 }
@@ -62,13 +66,13 @@ The AI engine converts a combination of Nokia NAC signals (SIM swap status, numb
 
 ## Applications & Expected Benefits
 
-| User Segment               | How They Use Sentinel                       | Example                                            |
-| -------------------------- | ------------------------------------------- | -------------------------------------------------- |
-| **Mobile money operators** | Check recipient safety before sending money | M-Pesa user sees "BLOCK – SIM swapped"             |
-| **Fintechs / Banks**       | Integrate API into transaction flow         | Lending app checks borrower identity               |
-| **SMEs**                   | Passwordless customer onboarding            | Market vendor verifies customer phone number       |
-| **Mobile money operators** | Bulk screening of agent numbers             | MTN MoMo screens all agents weekly                 |
-| **Ride-hailing platforms** | Verify driver identity and location         | Bolt checks driver location before assigning rides |
+| User Segment               | How They Use Sentinel                       | Example                                                                           |
+| -------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------- |
+| **Mobile money operators** | Check recipient safety before sending money | M-Pesa user sees "Transaction flagged – Verify receiver via phone before sending" |
+| **Fintechs / Banks**       | Integrate API into transaction flow         | Lending app checks borrower identity                                              |
+| **SMEs**                   | Passwordless customer onboarding            | Market vendor verifies customer phone number                                      |
+| **Mobile money operators** | Bulk screening of agent numbers             | MTN MoMo screens all agents weekly                                                |
+| **Ride-hailing platforms** | Verify driver identity and location         | Bolt checks driver location before assigning rides                                |
 
 ## Easy Integration with Popular Payment Providers
 

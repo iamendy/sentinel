@@ -46,10 +46,11 @@ export default function Home() {
           <div className="feature relative flex space-x-4 border-b pb-8 border-b-features/40 lg:pb-0 lg:border-b-0 items-start">
             <Advance />
             <div className="flex-col space-y-2 ">
-              <h3 className="font-manrope text-lg">SIM swap detection</h3>
+              <h3 className="font-manrope text-lg">
+                Fishy transaction detection
+              </h3>
               <p className="text-features">
-                Detect SIM swaps in real-time – stop fraudsters from
-                intercepting OTPs and draining accounts.
+                Intercept common transaction fraud patterns before they happen.
               </p>
             </div>
           </div>
@@ -142,7 +143,7 @@ export default function Home() {
             </div>
             <div className="card overflow-hidden px-8 py-8 rounded-lg">
               <h4 className="font-manrope text-[20px] font-medium text-white mb-4 pr-3">
-                85-95% of SIM swap attacks prevented
+                95% of fraudulent transaction prevented
               </h4>
               <p className="text-[16px] leading-[1.8em] mb-5">
                 That's over $3.7B in annual global fraud reduction potential.

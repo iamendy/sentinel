@@ -39,8 +39,8 @@ const Code = () => {
             <p className="text-red">&nbsp; response</p>
             <p className="text-green-500">
               {" "}
-              &nbsp; &nbsp; - This device was recently swapped. The user may
-              have lost control of their phone number.
+              &nbsp; &nbsp; - SAFE: No fraud indicators detected. Safe to
+              proceed.
             </p>
           </div>
         </div>
