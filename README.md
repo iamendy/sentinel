@@ -107,3 +107,5 @@ await paystack.transaction.initialize({ amount, email });
 3. Update the fields on the .env file with your keys
 
 4. Run `npm run dev` to start the server on your development environment.
+
+5. Run the curl commands from docs page or use the interactive demo app
