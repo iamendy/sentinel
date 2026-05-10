@@ -1,8 +1,8 @@
 ## Sentinel - Fraud Prevention API Suite
 
-🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video In Progress](https:#) | 📊 [Pitch Slides In Progress](https:#)
+🌐 [Live Demo](https://sentinelafrica.vercel.app) | 📹 [Demo Video](https://youtu.be/M9G-cU60dHU) | 📊 [Pitch Slides](https://docs.google.com/presentation/d/1Ae9XjTEAyVIjEvjhG3_OTVToQSA3XSqv/edit?usp=sharing&ouid=117978133827433195315&rtpof=true&sd=true)
 
-Sentinel is the 'Guardian Angel' for African mobile money. It gives every SME and fintech the power of a fraud detective in simple API calls.
+Sentinel is the Guardian Angel for African digital economy. It gives every SME and fintech the power of a fraud detective in simple API calls.
 
 ## Objective
 
@@ -10,11 +10,11 @@ To build **Sentinel**, a fraud prevention API suite that enable African fintechs
 
 ## Problem
 
-Mobile money users, fintechs, and SMEs have **no unified way** to verify transaction safety, onboard users securely, or detect fraud before it happens. Current solutions are reactive, fragmented, and require deep expertise.
+Mobile money users, fintechs, and SMEs have **no unified way** to verify transaction safety. Current solutions are reactive, fragmented, and require deep expertise.
 
 ## Proposed Solution
 
-Sentinel is a plug-and-play fraud prevention API that uses ** network intelligence** (Nokia Network as Code APIs) and **AI** to tell any business, in plain English, whether to **BLOCK, CAUTION, or SAFE** a transaction before it happens.
+Sentinel is an AI powered plug-and-play fraud prevention API system that uses ** network intelligence** (Nokia Network as Code APIs) and **AI** to tell any business, in plain English, whether to **BLOCK, CAUTION, or SAFE** a transaction before it happens.
 
 ## Implementation
 
@@ -29,7 +29,7 @@ The AI engine converts a combination of Nokia NAC signals (SIM swap status, numb
 | `/check-recipient`      | Pre-transaction recipient safety check | SIM Swap + Device Status                            |
 | `/verify-identity`      | Passwordless KYC for SME onboarding    | KYC Match + SIM Swap + Device Status                |
 | `/geofence-transaction` | Location-based transaction approval    | Location Retrieval + Device Status                  |
-| `/batch-verify`         | Bulk phone number risk screening       | SIM Swap + KYC Match                                |
+| `/batch-verify`         | Bulk phone number Agent risk screening | SIM Swap + KYC Match                                |
 | `/device-trust`         | Device compromise assessment           | Device Status + Device Swap + Location Verification |
 
 ### Example API Request (`/check-recipient`)
@@ -90,42 +90,20 @@ await paystack.transaction.initialize({ amount, email });
 // voila! Paystack is protected from fraudulent transactions!
 ```
 
-## Measurable Value & Business Justification
-
-| Metric                                 | Value           |
-| -------------------------------------- | --------------- |
-| SIM swap attacks prevented             | **85-95%**      |
-| Integration time                       | **< 5 minutes** |
-| Annual fraud reduction potential (SSA) | **$500M+**      |
-
 **Business justification:**
 
 - **For mobile money operators:** Each prevented fraud saves costs in customer reimbursement and operational costs
 - **For fintechs like Paystack:** Adding Sentinel takes less than 5 minutes of engineering time – no complex telecommunication expertise needed.
 - **For SMEs:** Adding Sentinel offers with seamless customer onboarding with phone numbers, and ensures safe transactions.
 
-## Building Upon Sentinel After the Hackathon
-
-- **Integrate client keys**
-- **Private beta**
-- **Monitoring and analytics dashboard**
-- **Freemium pricing**
-- **Add native SDKs** (Python, Ruby, PHP)
-
 ---
 
-## Alignment
+## 🧑‍💻 Instructions for testing locally
 
-- **Primary Theme:** Theme 1 (Financial Inclusion, Secure Payments & Anti-Fraud)
-- **Secondary Theme:** Theme 5 (SME Enablement & Digital Commerce Growth)
-- **GSMA Pillar:** Open Gateway – programmable network APIs for fraud prevention
-- **APIs Used:** 6 Nokia NaC APIs (SIM Swap, KYC Match, Device Status, Device Swap, Location Verification, Location Retrieval)
+1. Clone repo
 
-## Team Details
+2. run `cp .env.example .env`
 
-| Team Member      | Role                 |
-| ---------------- | -------------------- |
-| Nnamdi Umeh      | Lead Engineer        |
-| Victoria Munachi | AI / Product Manager |
+3. Update the fields on the .env file with your keys
 
----
+4. Run `npm run dev` to start the server on your development environment.
