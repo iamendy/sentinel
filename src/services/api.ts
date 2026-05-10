@@ -61,6 +61,7 @@ export const geofenceTransaction = async (
       "/geofence-transaction",
       data,
     );
+
     return response;
   } catch (error) {
     console.error("Geofence transaction error:", error);
@@ -77,7 +78,7 @@ export const batchVerify = async (
       "/batch-verify",
       data,
     );
-    console.log(response);
+
     return response;
   } catch (error) {
     console.error("Batch verify error:", error);
@@ -94,6 +95,7 @@ export const deviceTrust = async (
       "/device-trust",
       data,
     );
+
     return response;
   } catch (error) {
     console.error("Device trust error:", error);

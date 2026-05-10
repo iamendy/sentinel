@@ -65,10 +65,10 @@ export const ResultModal = ({
 
               {/* Results Cards Stack */}
               <div className="space-y-3">
-                {batchResults.map((result, index) => (
+                {batchResults.map((singleResult, index) => (
                   <BatchResultCard
-                    key={result.phoneNumber || index}
-                    result={result}
+                    key={singleResult.phoneNumber || index}
+                    result={singleResult}
                     index={index}
                   />
                 ))}
@@ -113,6 +113,101 @@ export const ResultModal = ({
                     </div>
                   </div>
                 </div>
+
+                {/*  Show signals used in a compact way */}
+                <div className="flex items-center gap-4 pt-2 text-xs justify-center">
+                  {singleResult.raw?.simSwap && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">SIM Swap:</span>
+                      <span
+                        className={
+                          singleResult.raw.simSwap.swapped
+                            ? "text-red"
+                            : "text-green-500"
+                        }
+                      >
+                        {singleResult.raw.simSwap.swapped ? "Yes" : "No"}
+                      </span>
+                    </div>
+                  )}
+                  {singleResult.raw?.deviceStatus?.connectivityStatus && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">Device:</span>
+                      <span
+                        className={`text-gray-300 ${
+                          singleResult.raw.deviceStatus.connectivityStatus !==
+                            "CONNECTED_DATA" &&
+                          singleResult.raw.deviceStatus.connectivityStatus !==
+                            "CONNECTED_SMS"
+                            ? "text-red"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {singleResult.raw.deviceStatus.connectivityStatus ===
+                        "CONNECTED_DATA"
+                          ? "Data"
+                          : singleResult.raw.deviceStatus.connectivityStatus ===
+                            "CONNECTED_SMS"
+                          ? "SMS"
+                          : "Offline"}
+                      </span>
+                    </div>
+                  )}
+                  {singleResult.raw?.geofence && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">
+                        locationVerification:
+                      </span>
+                      <span
+                        className={`text-gray-300 ${
+                          singleResult.raw.geofence.withinGeofence
+                            ? "text-green-500"
+                            : "text-red"
+                        }`}
+                      >
+                        {singleResult.raw.geofence.withinGeofence
+                          ? "True"
+                          : "False"}
+                      </span>
+                    </div>
+                  )}
+
+                  {singleResult.raw?.locationVerification && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">
+                        locationVerification:
+                      </span>
+                      <span
+                        className={`text-gray-300 ${
+                          singleResult.raw.locationVerification
+                            .verificationResult == "TRUE"
+                            ? "text-green-500"
+                            : "text-red"
+                        }`}
+                      >
+                        {singleResult.raw.locationVerification
+                          .verificationResult == "TRUE"
+                          ? "True"
+                          : "False"}
+                      </span>
+                    </div>
+                  )}
+
+                  {singleResult.raw?.deviceSwap && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-gray-400">DeviceSwap:</span>
+                      <span
+                        className={`text-gray-300 ${
+                          singleResult.raw.deviceSwap.swapped
+                            ? "text-red"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {singleResult.raw.deviceSwap.swapped ? "True" : "False"}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </>
             )
           )}
@@ -142,8 +237,8 @@ const BatchSummary = ({ results }: { results: any[] }) => {
 
   return (
     <div className="grid grid-cols-3 gap-3 mb-4">
-      <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-center">
-        <div className="text-2xl font-bold text-red-500">{blocked}</div>
+      <div className="bg-red/10 border border-red/30 rounded-lg p-3 text-center">
+        <div className="text-2xl font-bold text-red">{blocked}</div>
         <div className="text-xs text-gray-400">Blocked</div>
       </div>
       <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-center">

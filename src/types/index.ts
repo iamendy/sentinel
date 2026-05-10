@@ -78,6 +78,19 @@ export interface SentinelResponse {
       match: boolean;
       matchScore?: number;
     };
+    geofence: {
+      expectedLatitude: string | null;
+      expectedLongitude: string | null;
+      radius: number;
+      withinGeofence: boolean;
+    };
+    locationVerification: {
+      verificationResult: string;
+      lastLocationTime: string;
+    };
+    deviceSwap: {
+      swapped: boolean;
+    };
   };
 }
 

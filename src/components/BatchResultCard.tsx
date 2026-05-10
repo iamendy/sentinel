@@ -89,14 +89,14 @@ export const BatchResultCard = ({
           {result.decision?.reason}
         </div>
 
-        {/*  Show additional raw data in a compact way */}
+        {/*  Show singals used in a compact way */}
         <div className="flex items-center gap-4 pt-2 text-xs">
           {result.raw?.simSwap && (
             <div className="flex items-center gap-1">
               <span className="text-gray-400">SIM Swap:</span>
               <span
                 className={
-                  result.raw.simSwap.swapped ? "text-red-500" : "text-green-500"
+                  result.raw.simSwap.swapped ? "text-red" : "text-green-500"
                 }
               >
                 {result.raw.simSwap.swapped ? "Yes" : "No"}
@@ -106,7 +106,15 @@ export const BatchResultCard = ({
           {result.raw?.deviceStatus?.connectivityStatus && (
             <div className="flex items-center gap-1">
               <span className="text-gray-400">Device:</span>
-              <span className="text-gray-300">
+              <span
+                className={`text-gray-300 ${
+                  result.raw.deviceStatus.connectivityStatus !==
+                    "CONNECTED_DATA" &&
+                  result.raw.deviceStatus.connectivityStatus !== "CONNECTED_SMS"
+                    ? "text-red"
+                    : "text-green-500"
+                }`}
+              >
                 {result.raw.deviceStatus.connectivityStatus === "CONNECTED_DATA"
                   ? "Data"
                   : result.raw.deviceStatus.connectivityStatus ===

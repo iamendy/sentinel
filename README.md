@@ -102,13 +102,13 @@ await paystack.transaction.initialize({ amount, email });
 
 - **For mobile money operators:** Each prevented fraud saves costs in customer reimbursement and operational costs
 - **For fintechs like Paystack:** Adding Sentinel takes less than 5 minutes of engineering time – no complex telecommunication expertise needed.
+- **For SMEs:** Adding Sentinel offers with seamless customer onboarding with phone numbers, and ensures safe transactions.
 
 ## Building Upon Sentinel After the Hackathon
 
 - **Integrate client keys**
 - **Private beta**
 - **Monitoring and analytics dashboard**
-- **Incorporate more Nokia APIs **
 - **Freemium pricing**
 - **Add native SDKs** (Python, Ruby, PHP)
 

@@ -201,7 +201,7 @@ const Page = () => {
                 Auto-populate Demo Data
               </span>
               <span className="text-xs text-gray-400">
-                Toggle on to automatically fill form fields with sample data
+                Toggle on to automatically fill form or reset
               </span>
             </div>
             <Switch
